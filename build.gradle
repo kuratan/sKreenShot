@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'forge'
+
+ext.configFile = file "build.properties"
+
+configFile.withReader {
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+config.version = "${config.version_prefix}${config.version}.${System.getenv("BUILD_NUMBER") ?: 0}${config.version_suffix}"
+version = "${config.version}"
+group= "de.kuratan.${config.mod_id}"
+archivesBaseName = "sKreenShot"
+
+minecraft {
+    version = "${config.version_minecraft}-${config.version_forge}"
+    runDir = "eclipse"
+
+    replaceIn "SKreenShot.java"
+    replace "@VERSION@", "${config.version}"
+    replace "@MOD_ID@", "${config.mod_id}"
+}
+
+dependencies {
+
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include '*.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version, 'mod_id':project.config.mod_id
+    }
+        
+    // copy everything else, thats not the *.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude '*.info'
+    }
+}
+
+sourceSets { main { output.resourcesDir = output.classesDir } }

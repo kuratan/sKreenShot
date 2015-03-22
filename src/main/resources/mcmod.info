@@ -1,0 +1,16 @@
+[
+{
+  "modid": "${mod_id}",
+  "name": "sKreenShot,
+  "description": "Simple mod helping with some screenshot tasks.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Kuraron"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
