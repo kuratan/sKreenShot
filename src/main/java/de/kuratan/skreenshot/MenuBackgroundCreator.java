@@ -22,13 +22,18 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.nio.IntBuffer;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+
+enum Stage {
+    INIT, NORTH, EAST, SOUTH, WEST, UP, DOWN, DONE;
+}
 
 public class MenuBackgroundCreator {
 
     private Minecraft mc;
     private Method resize;
-    private int stage;
+    private Stage stage;
     private EntityPlayer player;
     private int height;
     private int width;
@@ -47,7 +52,7 @@ public class MenuBackgroundCreator {
 
     public MenuBackgroundCreator(EntityPlayer player) {
         this.player = player;
-        this.stage = -1;
+        this.stage = Stage.INIT;
         this.mc = Minecraft.getMinecraft();
         this.resize = null;
         timedDir = null;
@@ -114,24 +119,22 @@ public class MenuBackgroundCreator {
 
     private float getYRotForStage() {
         switch (this.stage) {
-            case 1:
+            case EAST:
                 return -90;
-            case 2:
-                // South
+            case SOUTH:
                 return 0.0f;
-            case 3:
+            case WEST:
                 return 90.0f;
             default:
-                // North
                 return -180.0f;
         }
     }
 
     private float getXRotForStage() {
         switch (this.stage) {
-            case 4:
+            case UP:
                 return -90.0f;
-            case 5:
+            case DOWN:
                 return 90.0f;
             default:
                 return 0.0f;
@@ -139,8 +142,8 @@ public class MenuBackgroundCreator {
     }
 
     private void nextState() {
-        this.stage = this.stage + 1;
-        if (this.stage > 5) {
+        this.stage = Stage.values()[Arrays.asList(Stage.values()).indexOf(this.stage) + 1];
+        if (this.stage == Stage.DONE) {
             try {
                 this.tearDown();
             } catch (InvocationTargetException e) {
@@ -156,8 +159,7 @@ public class MenuBackgroundCreator {
         pos.xCoord = Math.floor(pos.xCoord) + 0.5;
         pos.zCoord = Math.floor(pos.zCoord) + 0.5;
 
-        // Calculate next index
-        // North = 0, East, South, West, Up, Down = 5
+        // Set values for current stage
         player.setPositionAndRotation(pos.xCoord, pos.yCoord, pos.zCoord, getYRotForStage(), getXRotForStage());
         player.setPositionAndUpdate(pos.xCoord, pos.yCoord, pos.zCoord);
 
