@@ -2,6 +2,7 @@ package de.kuratan.skreenshot;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class MenuBackgroundCommand implements ICommand {
     public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {
         if (p_71515_1_ instanceof EntityPlayer) {
             new MenuBackgroundCreator((EntityPlayer) p_71515_1_);
+        } else {
+            throw new WrongUsageException("Caller must be a player entity");
         }
     }
 
