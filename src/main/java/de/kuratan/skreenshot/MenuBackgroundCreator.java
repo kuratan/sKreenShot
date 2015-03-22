@@ -26,7 +26,21 @@ import java.util.Arrays;
 import java.util.Date;
 
 enum Stage {
-    INIT, NORTH, EAST, SOUTH, WEST, UP, DOWN, DONE;
+    INIT(-1), NORTH(0), EAST(1), SOUTH(2), WEST(3), UP(4), DOWN(5), DONE(-1);
+
+    private int value;
+
+    Stage(int value) {
+        this.value = value;
+    }
+
+    public boolean isHelper() {
+        return this.value < 0;
+    }
+
+    public int getValue() {
+        return value;
+    }
 }
 
 public class MenuBackgroundCreator {
@@ -214,7 +228,7 @@ public class MenuBackgroundCreator {
         bufferedImage.setRGB(0, 0, width, height, values, 0, width);
 
         try {
-            ImageIO.write(bufferedImage, "png", new File(timedDir.getAbsolutePath(), "panorama_" + this.stage + ".png"));
+            ImageIO.write(bufferedImage, "png", new File(timedDir.getAbsolutePath(), "panorama_" + this.stage.getValue() + ".png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
