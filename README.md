@@ -1,5 +1,7 @@
 ## sKreenShot
 
+[![Build Status](http://ci.kuratan.de/mc/job/sKreenShot/badge/icon)](http://ci.kuratan.de/mc/job/sKreenShot/)
+
 Helper for taking Screenshots. Currently usable for:
  * Take Menubackground images
 
