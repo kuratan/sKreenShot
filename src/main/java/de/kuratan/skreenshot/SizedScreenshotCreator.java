@@ -6,38 +6,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.Vec3;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
-public class MenuBackgroundCreator extends ScreenShoter {
+public class SizedScreenShotCreator extends ScreenShoter {
 
     private Stage stage;
 
-    public MenuBackgroundCreator(EntityPlayer player) {
-        super(player, 256, 256);
+    public SizedScreenShotCreator(EntityPlayer player, int width, int height) {
+        super(player, width, height);
         this.stage = Stage.INIT;
-    }
-
-    private float getYRotForStage() {
-        switch (this.stage) {
-            case EAST:
-                return -90;
-            case SOUTH:
-                return 0.0f;
-            case WEST:
-                return 90.0f;
-            default:
-                return -180.0f;
-        }
-    }
-
-    private float getXRotForStage() {
-        switch (this.stage) {
-            case UP:
-                return -90.0f;
-            case DOWN:
-                return 90.0f;
-            default:
-                return 0.0f;
-        }
     }
 
 
@@ -66,6 +43,9 @@ public class MenuBackgroundCreator extends ScreenShoter {
 
     private void nextState() {
         this.stage = this.stage.next();
+        if (this.stage == Stage.EAST) {
+            this.stage = Stage.DONE;
+        }
         if (this.stage == Stage.DONE) {
             try {
                 this.tearDown();
@@ -77,18 +57,8 @@ public class MenuBackgroundCreator extends ScreenShoter {
             return;
         }
 
-        // Center on current block
-        Vec3 pos = player.getPosition(0);
-        pos.xCoord = Math.floor(pos.xCoord) + 0.5;
-        pos.zCoord = Math.floor(pos.zCoord) + 0.5;
-
-        // Set values for current stage
-        player.setPositionAndRotation(pos.xCoord, pos.yCoord, pos.zCoord, getYRotForStage(), getXRotForStage());
-        player.setPositionAndUpdate(pos.xCoord, pos.yCoord, pos.zCoord);
-
         this.shotSetUp = true;
         this.shotDone = false;
         this.wait = Config.FRAME_DELAY;
-        System.out.println("Prepared " + this.stage);
     }
 }
