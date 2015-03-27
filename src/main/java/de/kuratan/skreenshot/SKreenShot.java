@@ -19,5 +19,6 @@ public class SKreenShot {
     @EventHandler
     public void startingServer(FMLServerStartingEvent event) {
         event.registerServerCommand(new MenuBackgroundCommand());
+        event.registerServerCommand(new SizedScreenShotCommand());
     }
 }

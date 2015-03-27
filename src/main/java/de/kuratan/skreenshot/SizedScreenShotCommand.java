@@ -2,29 +2,29 @@ package de.kuratan.skreenshot;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class MenuBackgroundCommand implements ICommand {
+public class SizedScreenShotCommand implements ICommand {
     private List<String> aliases;
 
-    public MenuBackgroundCommand() {
+    public SizedScreenShotCommand() {
         aliases = new ArrayList<String>();
-        aliases.add("menubackground");
-        aliases.add("mbg");
+        aliases.add("sizedscreenshot");
+        aliases.add("ssh");
     }
 
     @Override
     public String getCommandName() {
-        return "menubackground";
+        return "sizedscreenshot";
     }
 
     @Override
     public String getCommandUsage(ICommandSender p_71518_1_) {
-        return "menubackground";
+        return "sizedscreenshot <width> <height>";
     }
 
     @Override
@@ -35,9 +35,8 @@ public class MenuBackgroundCommand implements ICommand {
     @Override
     public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {
         if (p_71515_1_ instanceof EntityPlayer) {
-            new MenuBackgroundCreator((EntityPlayer) p_71515_1_);
+            new SizedScreenShotCreator((EntityPlayer) p_71515_1_, Integer.parseInt(p_71515_2_[0]), Integer.parseInt(p_71515_2_[1]));
         } else {
-            throw new WrongUsageException("Caller must be a player entity");
         }
     }
 
@@ -67,6 +66,5 @@ public class MenuBackgroundCommand implements ICommand {
     public int compareTo(Object o) {
         return 0;
     }
-
 
 }
